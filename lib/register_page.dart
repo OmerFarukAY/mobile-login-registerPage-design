@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task1/ana_sayfa.dart';
 import 'login_page.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -104,14 +103,6 @@ class RegisterPage extends StatelessWidget {
         ],
       ),
     );
-  }
-  void _girisYap(BuildContext context){
-    MaterialPageRoute sayfaYolu = MaterialPageRoute(
-      builder: (BuildContext context){
-        return AnaSayfa();
-      },
-    );
-    Navigator.pushReplacement(context, sayfaYolu);
   }
 
   void _register(BuildContext context){
