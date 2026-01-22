@@ -42,10 +42,6 @@ class AnaSayfa extends StatelessWidget {
                     margin: EdgeInsets.zero,
                     accountName: Text("Ömer"),
                     accountEmail: Text("omer@ornek.com"),
-                    currentAccountPicture: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Text("ÖF", style: TextStyle(fontSize: 24.0)),
-                    ),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.centerRight,
@@ -111,8 +107,8 @@ class AnaSayfa extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: _buildIconsColor(Icons.headset_mic, "İletişim"),
-                    title: Text('İletişim'),
+                    leading: _buildIconsColor(Icons.help, "Yardım ve Destek"),
+                    title: Text('Yardım ve Destek'),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
