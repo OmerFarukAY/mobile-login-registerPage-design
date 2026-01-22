@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task1/login_page.dart';
-import 'package:task1/ana_sayfa.dart'; // <-- AnaSayfa'nın doğru import edildiğine emin ol!
+import 'package:task1/ana_sayfa.dart';
 
 void main() {
-  // Main fonksiyonunu eski, basit haline getirdik. Hata riskini sıfırladık.
+  // Hata riskini sıfırladık.
   runApp(const AnaUygulama());
 }
 
@@ -16,7 +16,7 @@ class AnaUygulama extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fitness App',
-      // home parametresine bir "Karar Verici" koyuyoruz
+      // Karar Verici
       home: const AcilisKontrolcusu(),
     );
   }
@@ -51,7 +51,7 @@ class AcilisKontrolcusu extends StatelessWidget {
           return const AnaSayfa();
         } else {
           // Giriş yapılmamış -> Login Sayfasına git
-          return const LoginPage();
+          return const AnaSayfa();
         }
       },
     );

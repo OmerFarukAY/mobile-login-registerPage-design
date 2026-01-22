@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerRight,
             end: Alignment.centerLeft,
@@ -57,29 +57,29 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView( // Klavye açılınca taşma olmasın diye
           child: Column(
             children: [
-              const SizedBox(height: 170),
+              SizedBox(height: 170),
               Image.asset(
                 'assets/beyaz_yazisiz_logo_arkaplansiz.png',
                 width: 150,
                 height: 150,
                 color: Colors.white,
               ),
-              const SizedBox(height: 100),
-              const Text(
+              SizedBox(height: 100),
+              Text(
                 "Welcome",
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // --- ANA EKRAN SIGN IN BUTONU ---
               Container(
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
                       Color(0xFFC2185B),
                       Color(0xFF880E4F),
@@ -92,13 +92,13 @@ class _LoginPageState extends State<LoginPage> {
                     _showSignInModal(context); // Giriş Modalını Aç
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 14),
+                    padding: EdgeInsets.symmetric(horizontal: 150, vertical: 14),
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    side: const BorderSide(color: Colors.white, width: 1.0),
+                    side: BorderSide(color: Colors.white, width: 1.0),
                   ),
-                  child: const Text(
+                  child: Text(
                     'SIGN IN',
                     style: TextStyle(
                       fontSize: 18,
@@ -109,18 +109,18 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // --- ANA EKRAN SIGN UP BUTONU ---
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 14),
+                  padding: EdgeInsets.symmetric(horizontal: 150, vertical: 14),
                 ),
                 onPressed: () {
                   _showSignUpModal(context); // Kayıt Modalını Aç
                 },
-                child: const Text(
+                child: Text(
                   "SIGN UP",
                   style: TextStyle(
                     fontSize: 18,
@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.65,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             boxShadow: [
@@ -155,11 +155,11 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "Hello Sign in!",
                 style: TextStyle(
                   fontSize: 24,
@@ -167,12 +167,12 @@ class _LoginPageState extends State<LoginPage> {
                   color: Color(0xFFBE2235),
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // --- Login E-mail ---
               TextField(
                 controller: _loginEmailController, // Controller Bağlandı
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'E-mail',
                   suffixIcon: Icon(Icons.check, color: Colors.grey),
                   labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
@@ -184,15 +184,15 @@ class _LoginPageState extends State<LoginPage> {
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // --- Login Password ---
               TextField(
                 controller: _loginPasswordController, // Controller Bağlandı
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  suffixIcon: Icon(Icons.visibility_off, color: Colors.grey),
+                  suffixIcon: Icon(Icons.lock, color: Colors.grey),
                   labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   floatingLabelStyle: TextStyle(
                       color: Color(0xFFBE2235),
@@ -202,14 +202,14 @@ class _LoginPageState extends State<LoginPage> {
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // --- SIGN IN BUTONU ---
               Container(
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
                       Color(0xFFC2185B),
                       Color(0xFF880E4F),
@@ -249,18 +249,18 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       print("4. Giriş BAŞARISIZ olduğu için panel KAPANMADI.");
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Giriş başarısız. Bilgileri kontrol edin.")),
+                        SnackBar(content: Text("Giriş başarısız. Bilgileri kontrol edin.")),
                       );
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding biraz ayarlandı taşmasın diye
+                    padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding biraz ayarlandı taşmasın diye
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    side: const BorderSide(color: Colors.white, width: 1.0),
+                    side: BorderSide(color: Colors.white, width: 1.0),
                   ),
-                  child: const Text(
+                  child: Text(
                     'SIGN IN',
                     style: TextStyle(
                       fontSize: 18,
@@ -287,7 +287,7 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.70, // Biraz yükselttim sığsın diye
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             boxShadow: [
@@ -295,12 +295,12 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: SingleChildScrollView( // Klavye açılınca taşmasın
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Create Your Account",
                   style: TextStyle(
                     fontSize: 24,
@@ -308,12 +308,12 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color(0xFFBE2235),
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 // --- Register Full Name ---
                 TextField(
                   controller: _registerNameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Full Name',
                     suffixIcon: Icon(Icons.check, color: Colors.grey),
                     labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
@@ -322,12 +322,12 @@ class _LoginPageState extends State<LoginPage> {
                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // --- Register E-mail ---
                 TextField(
                   controller: _registerEmailController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'E-mail',
                     suffixIcon: Icon(Icons.check, color: Colors.grey),
                     labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
@@ -336,13 +336,13 @@ class _LoginPageState extends State<LoginPage> {
                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // --- Register Password ---
                 TextField(
                   controller: _registerPasswordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Password',
                     suffixIcon: Icon(Icons.lock, color: Colors.grey),
                     labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
@@ -351,13 +351,13 @@ class _LoginPageState extends State<LoginPage> {
                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // --- Register Confirm Password ---
                 TextField(
                   controller: _registerConfirmPasswordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     suffixIcon: Icon(Icons.lock, color: Colors.grey),
                     labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
@@ -366,14 +366,14 @@ class _LoginPageState extends State<LoginPage> {
                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 // --- REGISTER BUTONU (BACKEND BAĞLANTILI) ---
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
                         Color(0xFFC2185B),
                         Color(0xFF880E4F),
@@ -383,16 +383,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding ayarlandı
+                      padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding ayarlandı
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      side: const BorderSide(color: Colors.white, width: 1.0),
+                      side: BorderSide(color: Colors.white, width: 1.0),
                     ),
                     onPressed: () async {
                       // Şifreler Eşleşiyor mu Kontrolü
                       if (_registerPasswordController.text != _registerConfirmPasswordController.text) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Şifreler uyuşmuyor!")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Şifreler uyuşmuyor!")));
                         return;
                       }
 
@@ -407,7 +407,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (context.mounted) {
                           Navigator.pop(context); // Paneli kapat
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text("Hesap başarıyla oluşturuldu!"),
                               backgroundColor: Colors.green,
                             ),
@@ -416,12 +416,12 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Kayıt başarısız."), backgroundColor: Colors.red),
+                            SnackBar(content: Text("Kayıt başarısız."), backgroundColor: Colors.red),
                           );
                         }
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       "SIGN UP",
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -438,7 +438,7 @@ class _LoginPageState extends State<LoginPage> {
   void _anaSayfayaGit(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const AnaSayfa()),
+      MaterialPageRoute(builder: (context) => AnaSayfa()),
     );
   }
 }
