@@ -30,169 +30,161 @@ class AnaSayfa extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       // Drawer Menu
       drawer: Drawer(
-          child:
-          Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    // Opsiyonel: Menü Başlığı (Profil vs.)
-                    UserAccountsDrawerHeader(
-                      margin: EdgeInsets.zero,
-                      accountName: Text("Ömer Faruk"),
-                      accountEmail: Text("omer@ornek.com"),
-                      currentAccountPicture: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Text("ÖF", style: TextStyle(fontSize: 24.0)),
+        child:
+        Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  // Opsiyonel: Menü Başlığı (Profil vs.)
+                  UserAccountsDrawerHeader(
+                    margin: EdgeInsets.zero,
+                    accountName: Text("Ömer"),
+                    accountEmail: Text("omer@ornek.com"),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Text("ÖF", style: TextStyle(fontSize: 24.0)),
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
+                        colors: [gradientStart, gradientEnd],
                       ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft,
-                          colors: [gradientStart, gradientEnd],
-                        ),
-                      ),
                     ),
-                    SizedBox(height: 25,),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.shopping_cart, "Sepet"),
-                      title: Text('Sepet'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SepetSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.favorite, "Favoriler"),
-                      title: Text('Favoriler'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FavorilerSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.notifications, "Bildirimler"),
-                      title: Text('Bildirimler'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BildirimlerSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.person, "Profil"),
-                      title: Text('Profil'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ProfilSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.info, "Hakkımızda"),
-                      title: Text('Hakkımızda'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HakkimizdaSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: _buildIconsColor(Icons.headset_mic, "İletişim"),
-                      title: Text('İletişim'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => IletisimSayfasi()),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading:_buildIconsColor(Icons.settings, "Ayarlar"),
-                      title: Text('Ayarlar'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AyarlarSayfasi()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 25,),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.shopping_cart, "Sepet"),
+                    title: Text('Sepet'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SepetSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.favorite, "Favoriler"),
+                    title: Text('Favoriler'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FavorilerSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.notifications, "Bildirimler"),
+                    title: Text('Bildirimler'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => BildirimlerSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.person, "Profil"),
+                    title: Text('Profil'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.info, "Hakkımızda"),
+                    title: Text('Hakkımızda'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HakkimizdaSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: _buildIconsColor(Icons.headset_mic, "İletişim"),
+                    title: Text('İletişim'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => IletisimSayfasi()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading:_buildIconsColor(Icons.settings, "Ayarlar"),
+                    title: Text('Ayarlar'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AyarlarSayfasi()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Divider(height: 1, color: Colors.grey),
-              ListTile(
-                leading:_buildIconsColor(Icons.exit_to_app,"Çıkış Yap"),
-                title: Text("Çıkış Yap"),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              SizedBox(height: 25),
-            ],
-          ),
+            ),
+            Divider(height: 1, color: Colors.grey),
+            ListTile(
+              leading:_buildIconsColor(Icons.exit_to_app,"Çıkış Yap"),
+              title: Text("Çıkış Yap"),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+            SizedBox(height: 25),
+          ],
+        ),
       ),
       body: Stack(
         children: [
-          //ARKADAKİ GRADYAN ALANI
           Container(
-            height: screenHeight * 0.35,
+            height: screenHeight * 0.50,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
                 colors: [gradientStart, gradientEnd],
               ),
-              //Alt köşeleri yuvarlatma
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
+
             ),
           ),
-
-          // --- KATMAN 2: ÖN PLANDAKİ İÇERİK ---
           SafeArea(
+            bottom: false,
             child: Column(
               children: [
-                // 1. Özel AppBar (Gradyanın üzerinde)
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Menü İkonu (Drawer'ı açar)
                       Builder(
                         builder: (context) => IconButton(
                           icon: Icon(Icons.menu, color: Colors.white, size: 28),
                           onPressed: () => Scaffold.of(context).openDrawer(),
                         ),
                       ),
-                      // Logo (Buraya kendi logonuzu koyun)
                       Image.asset(
                         'assets/beyaz_yazisiz_logo_arkaplansiz.png',
-                        width: 100,
-                        height: 100,
+                        width: 80,
+                        height: 80,
+                        // Resim yoksa hata vermemesi için ikon
+                        errorBuilder: (c, o, s) => Icon(Icons.checkroom, color: Colors.white, size: 40),
                       ),
-                      // Arama İkonu
                       IconButton(
                         icon: Icon(Icons.shopping_cart, color: Colors.white, size: 28),
                         onPressed: () {
@@ -203,6 +195,140 @@ class AnaSayfa extends StatelessWidget {
                         },
                       ),
                     ],
+                  ),
+                ),
+
+                //HOŞ GELDİN YAZISI
+                Padding(
+                  padding: EdgeInsets.only(left: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Hoş Geldin, ',
+                        style: TextStyle(fontSize: 16, color: Colors.white70),
+                        children: [
+                          TextSpan(
+                            text: 'Ömer',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // --- ARAMA ÇUBUĞU ---
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextField(
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: "Ürün ara...",
+                        hintStyle: TextStyle(color: Colors.white60),
+                        border: InputBorder.none,
+                        icon: Icon(Icons.search, color: Colors.white60),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    height: 140,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage('https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                        ),
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Yeni Sezon",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Koleksiyonu Keşfet",
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.all(20),
+                      children: [
+                        // Kategoriler
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildCategoryItem(Icons.shopping_bag, "Çantalar"),
+                            _buildCategoryItem(Icons.hiking, "Ayakkabı"),
+                            _buildCategoryItem(Icons.watch, "Saatler"),
+                            _buildCategoryItem(Icons.diamond, "Takı"),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+
+                        // Ürün Grid Yapısı
+                        GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 15,
+                          ),
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            return _buildProductCard(products[index]);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -234,4 +360,119 @@ class AnaSayfa extends StatelessWidget {
       ),
     );
   }
+  Widget _buildCategoryItem(IconData icon, String title) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Color(0xFFFCE4EC), // Hafif pembe arka plan
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: gradientEnd),
+        ),
+        SizedBox(height: 5),
+        Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+      ],
+    );
+  }
+  Widget _buildProductCard(Product product) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Ürün Resmi
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                    image: DecorationImage(
+                      image: NetworkImage(product.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.favorite, color: gradientEnd, size: 18),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Ürün Bilgileri
+          Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.title,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  product.price,
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+class Product {
+  final String title;
+  final String price;
+  final String imageUrl;
+
+  Product({required this.title, required this.price, required this.imageUrl});
+}
+
+// Örnek Veri
+List<Product> products = [
+  Product(
+    title: "Luna Çanta",
+    price: "₺ 1,200",
+    imageUrl: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+  ),
+  Product(
+    title: "Aurora Çanta",
+    price: "₺ 2,450",
+    imageUrl: "https://images.unsplash.com/photo-1591561954557-26941169b49e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+  ),
+  Product(
+    title: "Klasik Saat",
+    price: "₺ 1,400",
+    imageUrl: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+  ),
+  Product(
+    title: "Deri Çanta",
+    price: "₺ 3,100",
+    imageUrl: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+  ),
+];
