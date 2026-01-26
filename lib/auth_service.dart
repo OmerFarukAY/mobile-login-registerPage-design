@@ -104,6 +104,7 @@ class AuthService {
   }
 
   // --- PROFİL GÜNCELLE ---
+  // --- PROFİL GÜNCELLE (FOTOĞRAF DESTEKLİ) ---
   Future<bool> updateProfile({
     required String fullName,
     required String email,

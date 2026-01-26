@@ -1,3 +1,4 @@
+import 'dart:convert'; // <--- 1. BU EKLENDİ (Base64 decode için)
 import 'package:flutter/material.dart';
 import 'package:task1/auth_service.dart';
 import 'package:task1/ayarlar_sayfasi.dart';
@@ -9,7 +10,6 @@ import 'package:task1/login_page.dart';
 import 'package:task1/profil_sayfasi.dart';
 import 'package:task1/sepet_Sayfasi.dart';
 
-
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -19,43 +19,49 @@ void main() {
 
 class AnaSayfa extends StatelessWidget {
   const AnaSayfa({Key? key}) : super(key: key);
-  // Gradyan renklerini tanımlayalım
-  final Color gradientStart = const Color(0xFF560027); // Koyu Pembe
-  final Color gradientEnd = const Color(0xFFC2185B);   // Koyu Mor
+
+  final Color gradientStart = const Color(0xFF560027);
+  final Color gradientEnd = const Color(0xFFC2185B);
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      // Ana gövde rengi açık gri/beyaz
       backgroundColor: Colors.grey[100],
-      // Drawer Menu
       drawer: Drawer(
-        child:
-        Column(
+        child: Column(
           children: [
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  // Opsiyonel: Menü Başlığı (Profil vs.)
-                  // FutureBuilder tipini <Map<String, dynamic>?> olarak düzelttik
-                  // Drawer Başlığı
+                  // --- DRAWER BAŞLIĞI (GÜNCELLENDİ) ---
                   FutureBuilder<Map<String, dynamic>?>(
                     future: AuthService().getProfile(),
                     builder: (context, snapshot) {
                       String name = "Misafir";
                       String email = "misafir@ornek.com";
+                      String? base64Image; // Resim verisi
 
                       if (snapshot.hasData && snapshot.data != null) {
                         name = snapshot.data!['fullName'] ?? "Kullanıcı";
                         email = snapshot.data!['email'] ?? "";
+                        base64Image = snapshot.data!['profileImage']; // Backend'den resmi al
                       }
 
-                      // UserAccountsDrawerHeader YERİNE DrawerHeader kullanıyoruz
+                      // Resim Provider Hazırlığı
+                      ImageProvider? imageProvider;
+                      if (base64Image != null && base64Image.isNotEmpty) {
+                        try {
+                          imageProvider = MemoryImage(base64Decode(base64Image));
+                        } catch (e) {
+                          imageProvider = null;
+                        }
+                      }
+
                       return DrawerHeader(
                         margin: EdgeInsets.zero,
-                        padding: EdgeInsets.zero, // İç boşluğu sıfırladık ki gradyan tam dolsun
+                        padding: EdgeInsets.zero,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.centerRight,
@@ -65,15 +71,15 @@ class AnaSayfa extends StatelessWidget {
                         ),
                         child: Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center, // Dikeyde Ortala
-                            crossAxisAlignment: CrossAxisAlignment.center, // Yatayda Ortala
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              // 1. Profil Fotoğrafı
+                              // 1. Profil Fotoğrafı (Güncellendi)
                               Container(
                                 margin: const EdgeInsets.only(bottom: 10),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white, width: 3), // Beyaz çerçeve
+                                    border: Border.all(color: Colors.white, width: 3),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.2),
@@ -82,10 +88,14 @@ class AnaSayfa extends StatelessWidget {
                                       )
                                     ]
                                 ),
-                                child: const CircleAvatar(
-                                  radius: 40, // Fotoğraf büyüklüğü
-                                  backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-                                  backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Colors.white, // Resim yoksa beyaz zemin
+                                  backgroundImage: imageProvider, // Resim varsa koy
+                                  // Resim yoksa ikon koy (Instagram tarzı için gri ikon)
+                                  child: (imageProvider == null)
+                                      ? Icon(Icons.person, size: 50, color: Colors.grey[400])
+                                      : null,
                                 ),
                               ),
 
@@ -99,12 +109,12 @@ class AnaSayfa extends StatelessWidget {
                                 ),
                               ),
 
-                              // 3. E-posta (Biraz boşluk bırakarak)
+                              // 3. E-posta
                               const SizedBox(height: 5),
                               Text(
                                 email,
                                 style: const TextStyle(
-                                  color: Colors.white70, // Hafif şeffaf beyaz
+                                  color: Colors.white70,
                                   fontSize: 14,
                                 ),
                               ),
@@ -115,6 +125,7 @@ class AnaSayfa extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 25,),
+                  // ... Menü elemanları aynı kalacak ...
                   ListTile(
                     leading: _buildIconsColor(Icons.shopping_cart, "Sepet"),
                     title: Text('Sepet'),
@@ -210,6 +221,8 @@ class AnaSayfa extends StatelessWidget {
           ],
         ),
       ),
+      // ... Body kısmı (Hoşgeldin mesajı vb.) olduğu gibi kalabilir ...
+      // (Kalan kodlar önceki ana_sayfa.dart ile aynı)
       body: Stack(
         children: [
           Container(
@@ -256,20 +269,14 @@ class AnaSayfa extends StatelessWidget {
                   ),
                 ),
 
-                //HOŞ GELDİN YAZISI
-                // --- HOŞ GELDİN YAZISI (BACKEND ENTEGRASYONU) ---
+                //HOŞ GELDİN YAZISI (BACKEND)
                 FutureBuilder<Map<String, dynamic>?>(
-                  future: AuthService().getProfile(), // Backend'den bilgiyi iste
+                  future: AuthService().getProfile(),
                   builder: (context, snapshot) {
-                    String isim = "Misafir"; // Veri gelene kadar görünecek varsayılan isim
+                    String isim = "Misafir";
 
                     if (snapshot.hasData && snapshot.data != null) {
                       String fullName = snapshot.data!['fullName'] ?? "Kullanıcı";
-
-                      // Sadece ilk ismini göstermek istersen (Örn: Ömer Faruk -> Ömer):
-                      // isim = fullName.split(' ')[0];
-
-                      // Tam ismini göstermek istersen:
                       isim = fullName;
                     }
 
@@ -283,7 +290,7 @@ class AnaSayfa extends StatelessWidget {
                             style: const TextStyle(fontSize: 16, color: Colors.white70),
                             children: [
                               TextSpan(
-                                text: isim, // Backend'den gelen isim burada yazacak
+                                text: isim,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -298,6 +305,7 @@ class AnaSayfa extends StatelessWidget {
                   },
                 ),
 
+                // ... Arama çubuğu ve grid yapısı aynen devam ...
                 // --- ARAMA ÇUBUĞU ---
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -416,6 +424,7 @@ class AnaSayfa extends StatelessWidget {
     );
   }
 
+  // Yardımcı widgetlar (icon color vs) aynı kalacak
   Widget _buildIconsColor(IconData icon, String title) {
     return Container(
       child: Column(
@@ -522,6 +531,7 @@ class AnaSayfa extends StatelessWidget {
     );
   }
 }
+
 class Product {
   final String title;
   final String price;
@@ -532,6 +542,7 @@ class Product {
 
 // Örnek Veri
 List<Product> products = [
+  // ... Ürünler aynı
   Product(
     title: "MonsterXXXL PC",
     price: "₺ 1,231",

@@ -1,9 +1,10 @@
+import 'dart:convert'; // <--- 1. BU EKLENDİ (Base64 için şart)
 import 'package:flutter/material.dart';
 import 'package:task1/ayarlar_sayfasi.dart';
 import 'package:task1/bildirimler_sayfasi.dart';
 import 'package:task1/login_page.dart';
-import 'package:task1/profil_duzenle.dart'; // Dosya isminiz profil_duzenle.dart ise
-import 'package:task1/auth_service.dart'; // DİKKAT: AuthService import edildi
+import 'package:task1/profil_duzenle.dart';
+import 'package:task1/auth_service.dart';
 
 class ProfilSayfasi extends StatefulWidget {
   const ProfilSayfasi({Key? key}) : super(key: key);
@@ -13,11 +14,11 @@ class ProfilSayfasi extends StatefulWidget {
 }
 
 class _ProfilSayfasiState extends State<ProfilSayfasi> {
-  // UserService yerine AuthService kullanıyoruz
   final AuthService _authService = AuthService();
 
   String name = "Yükleniyor...";
   String email = "";
+  String? profileImage; // <--- 2. BU DEĞİŞKEN EKLENDİ
 
   @override
   void initState() {
@@ -25,17 +26,16 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
     _loadUserData();
   }
 
-  // --- BURASI GÜNCELLENDİ ---
   Future<void> _loadUserData() async {
-    // getUserData() YERİNE getProfile() KULLANIYORUZ
     final data = await _authService.getProfile();
 
     if (mounted) {
       setState(() {
         if (data != null) {
-          // Backend'den 'fullName' olarak geliyorsa burayı öyle çekmeliyiz
           name = data['fullName'] ?? "Kullanıcı";
           email = data['email'] ?? "";
+          // Backend'den gelen 'profileImage' verisini alıyoruz
+          profileImage = data['profileImage']; // <--- 3. VERİ ÇEKİLDİ
         } else {
           name = "Giriş Yapılmadı";
           email = "";
@@ -43,6 +43,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
       });
     }
   }
+
   final Color gradientEnd = const Color(0xFF880E4F);
   final Color gradientStart = const Color(0xFFC2185B);
   final Color scaffoldBg = const Color(0xFFF5F5F5);
@@ -82,15 +83,15 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                 ),
                 Positioned(
                   bottom: -60,
-                  child: _buildProfileImage(),
+                  // Değişkeni fonksiyona gönderiyoruz
+                  child: _buildProfileImage(profileImage),
                 ),
               ],
             ),
             const SizedBox(height: 70),
 
-            // DİNAMİK İSİM ALANI
             Text(
-              name, // Değişkenden gelen isim
+              name,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -98,10 +99,8 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               ),
             ),
             const SizedBox(height: 5),
-
-            // DİNAMİK E-POSTA ALANI
             Text(
-              email, // Değişkenden gelen mail
+              email,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -113,13 +112,11 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: OutlinedButton(
                 onPressed: () async {
-                  // Düzenleme sayfasına git ve dönüşü bekle
                   await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const ProfilDuzenle()),
                   );
-                  // Dönüşte sayfayı yenile
-                  _loadUserData();
+                  _loadUserData(); // Dönüşte sayfayı yenile
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: gradientStart, width: 1.5),
@@ -139,8 +136,9 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                 ),
               ),
             ),
-            // ... (Geri kalan menü kodları aynı kalabilir)
+
             const SizedBox(height: 30),
+            // ... Menü kodları (Aynı) ...
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -164,6 +162,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               ),
             ),
 
+            // ... Çıkış butonu kodları (Aynı) ...
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -200,7 +199,6 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                 ),
               ),
             ),
-
             const SizedBox(height: 50),
           ],
         ),
@@ -208,12 +206,25 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
     );
   }
 
-  // (Helper widget'lar _buildProfileImage, _buildMenuCard ve _HeaderCurveClipper aynen kalacak, buraya tekrar yapıştırmadım ama kodda durmalı)
-  Widget _buildProfileImage() {
+  // --- 4. GÜNCELLENMİŞ PROFİL FOTOĞRAFI WIDGET'I ---
+  Widget _buildProfileImage(String? base64String) {
+    ImageProvider? imageProvider;
+
+    // Fotoğraf verisi varsa decode et
+    if (base64String != null && base64String.isNotEmpty) {
+      try {
+        imageProvider = MemoryImage(base64Decode(base64String));
+      } catch (e) {
+        print("Resim decode hatası: $e");
+        imageProvider = null;
+      }
+    }
+
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 4),
+        color: Colors.grey[300], // Boşken gri zemin
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.15),
@@ -222,14 +233,20 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
           ),
         ],
       ),
-      child: const CircleAvatar(
+      child: CircleAvatar(
         radius: 60,
-        backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey[300],
+        // Resim varsa göster, yoksa null
+        backgroundImage: imageProvider,
+        // Resim yoksa ikon göster
+        child: (imageProvider == null)
+            ? Icon(Icons.person, size: 80, color: Colors.grey[500])
+            : null,
       ),
     );
   }
 
+  // _buildMenuCard ve _HeaderCurveClipper kodları aynı kalacak...
   Widget _buildMenuCard(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
