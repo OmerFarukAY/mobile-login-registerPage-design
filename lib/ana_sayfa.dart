@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task1/auth_service.dart';
 import 'package:task1/ayarlar_sayfasi.dart';
 import 'package:task1/bildirimler_sayfasi.dart';
 import 'package:task1/favoriler_sayfasi.dart';
@@ -38,17 +39,80 @@ class AnaSayfa extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 children: [
                   // Opsiyonel: Menü Başlığı (Profil vs.)
-                  UserAccountsDrawerHeader(
-                    margin: EdgeInsets.zero,
-                    accountName: Text("Ömer"),
-                    accountEmail: Text("omer@ornek.com"),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
-                        colors: [gradientStart, gradientEnd],
-                      ),
-                    ),
+                  // FutureBuilder tipini <Map<String, dynamic>?> olarak düzelttik
+                  // Drawer Başlığı
+                  FutureBuilder<Map<String, dynamic>?>(
+                    future: AuthService().getProfile(),
+                    builder: (context, snapshot) {
+                      String name = "Misafir";
+                      String email = "misafir@ornek.com";
+
+                      if (snapshot.hasData && snapshot.data != null) {
+                        name = snapshot.data!['fullName'] ?? "Kullanıcı";
+                        email = snapshot.data!['email'] ?? "";
+                      }
+
+                      // UserAccountsDrawerHeader YERİNE DrawerHeader kullanıyoruz
+                      return DrawerHeader(
+                        margin: EdgeInsets.zero,
+                        padding: EdgeInsets.zero, // İç boşluğu sıfırladık ki gradyan tam dolsun
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [gradientStart, gradientEnd],
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center, // Dikeyde Ortala
+                            crossAxisAlignment: CrossAxisAlignment.center, // Yatayda Ortala
+                            children: [
+                              // 1. Profil Fotoğrafı
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Colors.white, width: 3), // Beyaz çerçeve
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 8,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ]
+                                ),
+                                child: const CircleAvatar(
+                                  radius: 40, // Fotoğraf büyüklüğü
+                                  backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+
+                              // 2. İsim
+                              Text(
+                                name,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              // 3. E-posta (Biraz boşluk bırakarak)
+                              const SizedBox(height: 5),
+                              Text(
+                                email,
+                                style: const TextStyle(
+                                  color: Colors.white70, // Hafif şeffaf beyaz
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 25,),
                   ListTile(
@@ -178,8 +242,6 @@ class AnaSayfa extends StatelessWidget {
                         'assets/beyaz_yazisiz_logo_arkaplansiz.png',
                         width: 80,
                         height: 80,
-                        // Resim yoksa hata vermemesi için ikon
-                        errorBuilder: (c, o, s) => Icon(Icons.checkroom, color: Colors.white, size: 40),
                       ),
                       IconButton(
                         icon: Icon(Icons.shopping_cart, color: Colors.white, size: 28),
@@ -195,26 +257,45 @@ class AnaSayfa extends StatelessWidget {
                 ),
 
                 //HOŞ GELDİN YAZISI
-                Padding(
-                  padding: EdgeInsets.only(left: 20, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Hoş Geldin, ',
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                        children: [
-                          TextSpan(
-                            text: 'Ömer',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20),
+                // --- HOŞ GELDİN YAZISI (BACKEND ENTEGRASYONU) ---
+                FutureBuilder<Map<String, dynamic>?>(
+                  future: AuthService().getProfile(), // Backend'den bilgiyi iste
+                  builder: (context, snapshot) {
+                    String isim = "Misafir"; // Veri gelene kadar görünecek varsayılan isim
+
+                    if (snapshot.hasData && snapshot.data != null) {
+                      String fullName = snapshot.data!['fullName'] ?? "Kullanıcı";
+
+                      // Sadece ilk ismini göstermek istersen (Örn: Ömer Faruk -> Ömer):
+                      // isim = fullName.split(' ')[0];
+
+                      // Tam ismini göstermek istersen:
+                      isim = fullName;
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20, bottom: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Hoş Geldin, ',
+                            style: const TextStyle(fontSize: 16, color: Colors.white70),
+                            children: [
+                              TextSpan(
+                                text: isim, // Backend'den gelen isim burada yazacak
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
 
                 // --- ARAMA ÇUBUĞU ---
@@ -300,10 +381,10 @@ class AnaSayfa extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _buildCategoryItem(Icons.shopping_bag, "Çantalar"),
-                            _buildCategoryItem(Icons.hiking, "Ayakkabı"),
-                            _buildCategoryItem(Icons.watch, "Saatler"),
-                            _buildCategoryItem(Icons.diamond, "Takı"),
+                            _buildCategoryItem(Icons.shopping_bag, "Giyim"),
+                            _buildCategoryItem(Icons.menu_book, "Kırtasiye"),
+                            _buildCategoryItem(Icons.computer, "Elektronik"),
+                            _buildCategoryItem(Icons.diamond, "Aksesuar"),
                           ],
                         ),
                         SizedBox(height: 20),
@@ -410,7 +491,7 @@ class AnaSayfa extends StatelessWidget {
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.favorite, color: gradientEnd, size: 18),
+                    child: Icon(Icons.favorite_border, color: gradientEnd, size: 18),
                   ),
                 ),
               ],
@@ -452,9 +533,9 @@ class Product {
 // Örnek Veri
 List<Product> products = [
   Product(
-    title: "Luna Çanta",
-    price: "₺ 1,200",
-    imageUrl: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    title: "MonsterXXXL PC",
+    price: "₺ 1,231",
+    imageUrl: "https://cdn.britannica.com/77/170477-050-1C747EE3/Laptop-computer.jpg",
   ),
   Product(
     title: "Aurora Çanta",

@@ -11,6 +11,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  bool _isLoginPasswordVisible = false;
+  bool _isRegisterPasswordVisible = false;
+  bool _isRegisterConfirmVisible = false;
+
   // Giriş Yap  İçin
   final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _loginPasswordController = TextEditingController();
@@ -137,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //           GİRİŞ YAP MODALI
+  //           GİRİŞ YAP MODALI (GÜNCELLENMİŞ)
   void _showSignInModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -145,138 +151,125 @@ class _LoginPageState extends State<LoginPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.65,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
-            ],
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Hello Sign in!",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFBE2235),
-                ),
+        // StatefulBuilder: Modal içindeki anlık değişimleri (göz ikonunu) algılamak için gerekli
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
+                ],
               ),
-              SizedBox(height: 30),
-
-              // --- Login E-mail ---
-              TextField(
-                controller: _loginEmailController, // Controller Bağlandı
-                decoration: InputDecoration(
-                  labelText: 'E-mail',
-                  suffixIcon: Icon(Icons.check, color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  floatingLabelStyle: TextStyle(
-                      color: Color(0xFFBE2235),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                ),
-              ),
-              SizedBox(height: 20),
-
-              // --- Login Password ---
-              TextField(
-                controller: _loginPasswordController, // Controller Bağlandı
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  suffixIcon: Icon(Icons.lock, color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  floatingLabelStyle: TextStyle(
-                      color: Color(0xFFBE2235),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                ),
-              ),
-              SizedBox(height: 30),
-
-              // --- SIGN IN BUTONU ---
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFC2185B),
-                      Color(0xFF880E4F),
-                      Color(0xFF560027),
-                    ],
-                  ),
-                ),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    print("1. Butona basıldı, servise gidiliyor...");
-
-                    // Servise Git
-                    bool success = await _authService.login(
-                      _loginEmailController.text,
-                      _loginPasswordController.text,
-                    );
-
-                    print("2. Servisten cevap geldi. Sonuç: $success");
-
-                    if (!context.mounted) {
-                      print("3. HATA: Ekran (Context) artık yok, işlem iptal.");
-                      return;
-                    }
-
-                    if (success) {
-                      print("4. Giriş Başarılı! Hafızaya kaydediliyor ve panel kapatılıyor...");
-
-                      // Giriş başarılı olduğu an, telefon hafızasına "Bu kullanıcı giriş yaptı" diye not düşüyoruz.
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('isLoggedIn', true);
-
-                      Navigator.of(context).pop();
-
-                      print("5. Panel kapandı, Ana Sayfaya gidiliyor.");
-                      _anaSayfayaGit(context);
-
-                    } else {
-                      print("4. Giriş BAŞARISIZ olduğu için panel KAPANMADI.");
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Giriş başarısız. Bilgileri kontrol edin.")),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding biraz ayarlandı taşmasın diye
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    side: BorderSide(color: Colors.white, width: 1.0),
-                  ),
-                  child: Text(
-                    'SIGN IN',
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello Sign in!",
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFFBE2235),
                     ),
                   ),
-                ),
+                  SizedBox(height: 30),
+
+                  // --- Login E-mail ---
+                  TextField(
+                    controller: _loginEmailController,
+                    decoration: InputDecoration(
+                      labelText: 'E-mail',
+                      suffixIcon: Icon(Icons.check, color: Colors.grey),
+                      labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                      floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  // --- Login Password (GÜNCELLENDİ) ---
+                  TextField(
+                    controller: _loginPasswordController,
+                    obscureText: !_isLoginPasswordVisible, // Şifre gizli mi açık mı?
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      // Göz İkonu Butonu
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isLoginPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          // setModalState: Sadece modalı yeniler
+                          setModalState(() {
+                            _isLoginPasswordVisible = !_isLoginPasswordVisible;
+                          });
+                        },
+                      ),
+                      labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                      floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+
+                  // --- SIGN IN BUTONU ---
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFC2185B), Color(0xFF880E4F), Color(0xFF560027)],
+                      ),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // ... (Eski giriş kodların aynen buraya gelecek) ...
+                        // Kodu kısaltmak için burayı özet geçiyorum, senin mevcut login fonksiyonun buraya kopyalanmalı.
+                        bool success = await _authService.login(
+                          _loginEmailController.text,
+                          _loginPasswordController.text,
+                        );
+                        if (!context.mounted) return;
+                        if (success) {
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('isLoggedIn', true);
+                          Navigator.of(context).pop();
+                          _anaSayfayaGit(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Giriş başarısız. Bilgileri kontrol edin.")),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14),
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        side: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      child: Text(
+                        'SIGN IN',
+                        style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
   //           KAYIT OL (REGISTER) MODAL
+  //           KAYIT OL (REGISTER) MODAL (GÜNCELLENMİŞ)
   void _showSignUpModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -285,151 +278,147 @@ class _LoginPageState extends State<LoginPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.70, // Biraz yükselttim sığsın diye
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
-            ],
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: SingleChildScrollView( // Klavye açılınca taşmasın
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Create Your Account",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFBE2235),
-                  ),
-                ),
-                SizedBox(height: 30),
-
-                // --- Register Full Name ---
-                TextField(
-                  controller: _registerNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    suffixIcon: Icon(Icons.check, color: Colors.grey),
-                    labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                // --- Register E-mail ---
-                TextField(
-                  controller: _registerEmailController,
-                  decoration: InputDecoration(
-                    labelText: 'E-mail',
-                    suffixIcon: Icon(Icons.check, color: Colors.grey),
-                    labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                // --- Register Password ---
-                TextField(
-                  controller: _registerPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    suffixIcon: Icon(Icons.lock, color: Colors.grey),
-                    labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                // --- Register Confirm Password ---
-                TextField(
-                  controller: _registerConfirmPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    suffixIcon: Icon(Icons.lock, color: Colors.grey),
-                    labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
-                  ),
-                ),
-                SizedBox(height: 30),
-
-                // --- REGISTER BUTONU (BACKEND BAĞLANTILI) ---
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFC2185B),
-                        Color(0xFF880E4F),
-                        Color(0xFF560027),
-                      ],
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, -5))
+                ],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Create Your Account",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFBE2235)),
                     ),
-                  ),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14), // Padding ayarlandı
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      side: BorderSide(color: Colors.white, width: 1.0),
+                    SizedBox(height: 30),
+
+                    // Full Name ve Email kısımları aynı...
+                    TextField(
+                      controller: _registerNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Full Name',
+                        suffixIcon: Icon(Icons.check, color: Colors.grey),
+                        // ... Diğer decoration ayarları aynı
+                      ),
                     ),
-                    onPressed: () async {
-                      // Şifreler Eşleşiyor mu Kontrolü
-                      if (_registerPasswordController.text != _registerConfirmPasswordController.text) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Şifreler uyuşmuyor!")));
-                        return;
-                      }
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _registerEmailController,
+                      decoration: InputDecoration(
+                        labelText: 'E-mail',
+                        suffixIcon: Icon(Icons.check, color: Colors.grey),
+                        // ... Diğer decoration ayarları aynı
+                      ),
+                    ),
+                    SizedBox(height: 20),
 
-                      // Servise Git
-                      bool success = await _authService.register(
-                        _registerNameController.text,
-                        _registerEmailController.text,
-                        _registerPasswordController.text,
-                      );
+                    // --- Register Password (GÜNCELLENDİ) ---
+                    TextField(
+                      controller: _registerPasswordController,
+                      obscureText: !_isRegisterPasswordVisible, // Değişken bağlandı
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        // Göz İkonu
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isRegisterPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setModalState(() {
+                              _isRegisterPasswordVisible = !_isRegisterPasswordVisible;
+                            });
+                          },
+                        ),
+                        labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                        floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
+                      ),
+                    ),
+                    SizedBox(height: 20),
 
-                      if (success) {
-                        if (context.mounted) {
-                          Navigator.pop(context); // Paneli kapat
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Hesap başarıyla oluşturuldu!"),
-                              backgroundColor: Colors.green,
-                            ),
+                    // --- Register Confirm Password (GÜNCELLENDİ) ---
+                    TextField(
+                      controller: _registerConfirmPasswordController,
+                      obscureText: !_isRegisterConfirmVisible, // Değişken bağlandı
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        // Göz İkonu
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isRegisterConfirmVisible ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setModalState(() {
+                              _isRegisterConfirmVisible = !_isRegisterConfirmVisible;
+                            });
+                          },
+                        ),
+                        labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                        floatingLabelStyle: TextStyle(color: Color(0xFFBE2235), fontWeight: FontWeight.bold, fontSize: 16),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFBE2235))),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+
+                    // Register Butonu (Aynı kalacak)
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFC2185B), Color(0xFF880E4F), Color(0xFF560027)],
+                        ),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 160, vertical: 14),
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          side: BorderSide(color: Colors.white, width: 1.0),
+                        ),
+                        onPressed: () async {
+                          // ... (Senin mevcut register kodların buraya) ...
+                          if (_registerPasswordController.text != _registerConfirmPasswordController.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Şifreler uyuşmuyor!")));
+                            return;
+                          }
+                          bool success = await _authService.register(
+                            _registerNameController.text,
+                            _registerEmailController.text,
+                            _registerPasswordController.text,
                           );
-                        }
-                      } else {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Kayıt başarısız."), backgroundColor: Colors.red),
-                          );
-                        }
-                      }
-                    },
-                    child: Text(
-                      "SIGN UP",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          if (success && context.mounted) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Hesap başarıyla oluşturuldu!"), backgroundColor: Colors.green),
+                            );
+                          } else if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Kayıt başarısız."), backgroundColor: Colors.red),
+                            );
+                          }
+                        },
+                        child: Text("SIGN UP", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

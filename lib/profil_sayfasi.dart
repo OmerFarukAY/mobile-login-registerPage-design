@@ -1,10 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:task1/ayarlar_sayfasi.dart';
 import 'package:task1/bildirimler_sayfasi.dart';
 import 'package:task1/login_page.dart';
+import 'package:task1/profil_duzenle.dart'; // Dosya isminiz profil_duzenle.dart ise
+import 'package:task1/auth_service.dart'; // DİKKAT: AuthService import edildi
 
-class ProfilSayfasi extends StatelessWidget {
+class ProfilSayfasi extends StatefulWidget {
   const ProfilSayfasi({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilSayfasi> createState() => _ProfilSayfasiState();
+}
+
+class _ProfilSayfasiState extends State<ProfilSayfasi> {
+  // UserService yerine AuthService kullanıyoruz
+  final AuthService _authService = AuthService();
+
+  String name = "Yükleniyor...";
+  String email = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // --- BURASI GÜNCELLENDİ ---
+  Future<void> _loadUserData() async {
+    // getUserData() YERİNE getProfile() KULLANIYORUZ
+    final data = await _authService.getProfile();
+
+    if (mounted) {
+      setState(() {
+        if (data != null) {
+          // Backend'den 'fullName' olarak geliyorsa burayı öyle çekmeliyiz
+          name = data['fullName'] ?? "Kullanıcı";
+          email = data['email'] ?? "";
+        } else {
+          name = "Giriş Yapılmadı";
+          email = "";
+        }
+      });
+    }
+  }
   final Color gradientEnd = const Color(0xFF880E4F);
   final Color gradientStart = const Color(0xFFC2185B);
   final Color scaffoldBg = const Color(0xFFF5F5F5);
@@ -42,18 +80,17 @@ class ProfilSayfasi extends StatelessWidget {
                     height: 80,
                   ),
                 ),
-
                 Positioned(
                   bottom: -60,
                   child: _buildProfileImage(),
                 ),
               ],
             ),
-
             const SizedBox(height: 70),
 
+            // DİNAMİK İSİM ALANI
             Text(
-              "Ömer Faruk AY",
+              name, // Değişkenden gelen isim
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -61,8 +98,10 @@ class ProfilSayfasi extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
+
+            // DİNAMİK E-POSTA ALANI
             Text(
-              "omerfaruk@ornek.com",
+              email, // Değişkenden gelen mail
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -73,8 +112,14 @@ class ProfilSayfasi extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: OutlinedButton(
-                onPressed: () {
-                  // TODO: Profil düzenleme sayfasına git
+                onPressed: () async {
+                  // Düzenleme sayfasına git ve dönüşü bekle
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfilDuzenle()),
+                  );
+                  // Dönüşte sayfayı yenile
+                  _loadUserData();
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: gradientStart, width: 1.5),
@@ -94,13 +139,19 @@ class ProfilSayfasi extends StatelessWidget {
                 ),
               ),
             ),
-
+            // ... (Geri kalan menü kodları aynı kalabilir)
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  _buildMenuCard(context, icon: Icons.settings, title: "Hesap Ayarları", onTap: () {}),
+                  _buildMenuCard(context, icon: Icons.settings, title: "Ayarlar",onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AyarlarSayfasi()),
+                    );
+                  },),
                   _buildMenuCard(context, icon: Icons.notifications, title: "Bildirimler", onTap: () {
                     Navigator.pushReplacement(
                       context,
@@ -113,7 +164,7 @@ class ProfilSayfasi extends StatelessWidget {
               ),
             ),
 
-             SizedBox(height: 25),
+            SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
@@ -157,6 +208,7 @@ class ProfilSayfasi extends StatelessWidget {
     );
   }
 
+  // (Helper widget'lar _buildProfileImage, _buildMenuCard ve _HeaderCurveClipper aynen kalacak, buraya tekrar yapıştırmadım ama kodda durmalı)
   Widget _buildProfileImage() {
     return Container(
       decoration: BoxDecoration(
